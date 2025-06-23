@@ -9,10 +9,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Calm & Harmonious -->
-    <!-- Application Structure Plan: De SPA volgt een logische, lineaire structuur die de hoofdstukken van het rapport weerspiegelt (Intro, Fundamenten, Control Flow, etc.), ideaal voor een educatieve 'crash course'. Een sticky navigatiebalk zorgt voor snelle toegang tot elk onderdeel. De interactiviteit is ontworpen om abstracte concepten te concretiseren: codevoorbeelden die "draaien", interactieve diagrammen die logische stromen visualiseren, en dynamische grafieken om concepten te vergelijken. Deze structuur bevordert een stapsgewijze, zelfgestuurde leerervaring. -->
-    <!-- Visualization & Content Choices: Data uit het rapport wordt gevisualiseerd met een doel. Datatype-verdeling -> Vergelijken -> Donut Chart (Chart.js/Canvas) voor visuele verhoudingen. If/Else logica -> Proces tonen -> HTML/CSS Flowchart voor duidelijke beslissingspaden. Functie concept -> Proces uitleggen -> HTML/CSS diagram als 'zwarte doos' voor abstractie. Pseudocode vs Python -> Vergelijken -> Interactieve tabel voor directe 1-op-1 mapping. Al deze keuzes zijn gemaakt om de leerervaring te verbeteren en de concepten beter te laten beklijven. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f7f3f0; color: #4a4a4a; }
         .font-code { font-family: 'Source Code Pro', monospace; }
@@ -62,12 +58,13 @@
     <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
         <nav class="container mx-auto px-4">
             <ul class="flex items-center justify-center space-x-4 sm:space-x-8 text-sm sm:text-base font-semibold text-gray-600 overflow-x-auto py-3">
-                <li><a href="#intro" class="nav-link py-2 border-b-2 border-transparent">Introductie</a></li>
+                <li><a href="index.html" class="nav-link py-2 border-b-2 border-transparent">Hoofdpagina</a></li>
                 <li><a href="#fundamenten" class="nav-link py-2 border-b-2 border-transparent">Fundamenten</a></li>
                 <li><a href="#flow" class="nav-link py-2 border-b-2 border-transparent">Control Flow</a></li>
                 <li><a href="#functies" class="nav-link py-2 border-b-2 border-transparent">Functies</a></li>
                 <li><a href="#pseudo" class="nav-link py-2 border-b-2 border-transparent">Pseudocode</a></li>
                 <li><a href="#oefenen" class="nav-link py-2 border-b-2 border-transparent">Oefenen</a></li>
+                <li><a href="handout.html" class="nav-link py-2 border-b-2 border-transparent">Handout</a></li>
             </ul>
         </nav>
     </header>
@@ -136,7 +133,7 @@
                     </div>
                     <div>
                         <h3 class="text-xl font-semibold mb-4">Code Herhalen: `for` vs `while` Loops</h3>
-                        <p class="mb-4">Loops automatiseren herhalende taken. Een `for` loop gebruik je typisch als je weet hoe vaak je iets wilt herhalen (bv. voor elk item in een lijst). Een `while` loop gebruik je als je door wilt gaan zolang een bepaalde conditie waar is.</p>
+                        <p class="mb-4">Loops zijn essentieel om taken te automatiseren. Een `for` loop gebruik je typisch als je weet hoe vaak je iets wilt herhalen (bv. voor elk item in een lijst). Een `while` loop gebruik je als je door wilt gaan zolang een bepaalde conditie waar is.</p>
                          <div class="chart-container">
                             <canvas id="loopsChart"></canvas>
                         </div>
