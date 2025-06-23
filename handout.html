@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="nl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactieve Python Crash Course | 5 VWO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7f3f0; color: #4a4a4a; }
+        .font-code { font-family: 'Source Code Pro', monospace; }
+        .chart-container { position: relative; width: 100%; max-width: 450px; margin-left: auto; margin-right: auto; height: 300px; max-h: 350px; }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        .nav-link { transition: all 0.2s ease-in-out; }
+        .nav-link:hover, .nav-link.active { color: #e58c5d; border-color: #e58c5d; }
+        .interactive-code-output {
+            transition: all 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+        .interactive-code-output.visible {
+            max-height: 100px;
+            opacity: 1;
+            margin-top: 0.5rem;
+        }
+        .flowchart-node {
+            border: 2px solid #a7a5a3;
+            background-color: #ffffff;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .flowchart-arrow {
+            height: 30px;
+            width: 2px;
+            background-color: #a7a5a3;
+            margin: 0.5rem auto;
+            position: relative;
+        }
+        .flowchart-arrow::after {
+            content: '▼';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #a7a5a3;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4">
+            <ul class="flex items-center justify-center space-x-4 sm:space-x-8 text-sm sm:text-base font-semibold text-gray-600 overflow-x-auto py-3">
+                <li><a href="index.html" class="nav-link py-2 border-b-2 border-transparent">Hoofdpagina</a></li>
+                <li><a href="#fundamenten" class="nav-link py-2 border-b-2 border-transparent">Fundamenten</a></li>
+                <li><a href="#flow" class="nav-link py-2 border-b-2 border-transparent">Control Flow</a></li>
+                <li><a href="#functies" class="nav-link py-2 border-b-2 border-transparent">Functies</a></li>
+                <li><a href="#pseudo" class="nav-link py-2 border-b-2 border-transparent">Pseudocode</a></li>
+                <li><a href="#oefenen" class="nav-link py-2 border-b-2 border-transparent">Oefenen</a></li>
+                <li><a href="handout.html" class="nav-link py-2 border-b-2 border-transparent">Handout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 md:p-8">
+
+        <section id="intro" class="text-center py-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#4a4a4a]">Python Crash Course</h1>
+            <p class="text-lg md:text-xl mt-4 max-w-3xl mx-auto text-gray-600">Een interactieve gids voor 5 VWO. Ontdek de basis van programmeren op een visuele en boeiende manier.</p>
+        </section>
+
+        <div class="space-y-12">
+            
+            <section id="fundamenten" class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold mb-2">Fundamenten van Python</h2>
+                <p class="text-gray-600 mb-8">Elk programma draait om data. Hier leer je hoe je data opslaat in variabelen, welke soorten data er zijn en hoe je er bewerkingen op uitvoert. Dit is de absolute basis van elke code die je zult schrijven.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Variabelen & Datatypes</h3>
+                        <p class="mb-4">Een variabele is een 'label' voor een stukje data. Python kent verschillende datatypes, zoals tekst (`str`), gehele getallen (`int`), kommagetallen (`float`) en logische waarden (`bool`). De donut-grafiek toont een schatting van hoe vaak deze types in een gemiddeld programma voorkomen.</p>
+                        <div class="chart-container">
+                            <canvas id="dataTypesChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Interactieve Code: `print()` en `input()`</h3>
+                        <p class="mb-4">Met `print()` toon je informatie op het scherm. Met `input()` vraag je de gebruiker om informatie. Probeer het zelf! Voer je naam in en klik op 'Run'.</p>
+                        <div class="bg-gray-800 rounded-lg p-4 font-code">
+                            <div class="text-gray-400">naam = input("Wat is je naam? ")</div>
+                            <div class="text-purple-400">print(<span class="text-yellow-300">f"Hallo, {naam}!"</span>)</div>
+                            <div class="mt-4">
+                                <label for="nameInput" class="text-gray-400">Wat is je naam? </label>
+                                <input type="text" id="nameInput" placeholder="Typ hier..." class="bg-gray-700 text-white rounded px-2 py-1 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#e58c5d]">
+                            </div>
+                            <button id="runInputBtn" class="mt-4 bg-[#e58c5d] text-white font-bold py-2 px-4 rounded hover:bg-opacity-90 transition-colors">▶ Run</button>
+                            <div id="inputOutput" class="interactive-code-output p-3 bg-gray-900 rounded font-bold text-cyan-300"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="flow" class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold mb-2">Programmaflow Besturen</h2>
+                <p class="text-gray-600 mb-8">Een programma kan keuzes maken en taken herhalen. Met `if/else` statements en `loops` geef je jouw code intelligentie en voorkom je onnodige herhaling. Dit is cruciaal voor het oplossen van complexe problemen.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Beslissingen Nemen: `if-elif-else`</h3>
+                        <p class="mb-4">Dit stroomdiagram visualiseert hoe een `if` statement werkt. De code volgt een pad op basis van of een conditie `Waar` of `Onwaar` is.</p>
+                        <div class="flex flex-col items-center p-4 bg-gray-50 rounded-lg">
+                            <div class="flowchart-node">Start</div>
+                            <div class="flowchart-arrow"></div>
+                            <div class="flowchart-node font-semibold">if leeftijd >= 18:</div>
+                            <div class="flex w-full mt-2">
+                                <div class="w-1/2 pr-2 border-r-2 border-gray-300">
+                                    <div class="text-center font-bold text-green-600 mb-2">Waar</div>
+                                    <div class="flowchart-arrow"></div>
+                                    <div class="flowchart-node text-sm">print("Welkom")</div>
+                                </div>
+                                <div class="w-1/2 pl-4">
+                                    <div class="text-center font-bold text-red-600 mb-2">Onwaar</div>
+                                    <div class="flowchart-arrow"></div>
+                                    <div class="flowchart-node text-sm">print("Geen toegang")</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Code Herhalen: `for` vs `while` Loops</h3>
+                        <p class="mb-4">Loops zijn essentieel om taken te automatiseren. Een `for` loop gebruik je typisch als je weet hoe vaak je iets wilt herhalen (bv. voor elk item in een lijst). Een `while` loop gebruik je als je door wilt gaan zolang een bepaalde conditie waar is.</p>
+                         <div class="chart-container">
+                            <canvas id="loopsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="functies" class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold mb-2">Functies: Herbruikbare Codeblokken</h2>
+                <p class="text-gray-600 mb-8">Functies zijn als mini-programma's binnen je programma. Ze nemen input (argumenten), voeren een specifieke taak uit en geven een resultaat terug (returnwaarde). Dit maakt je code georganiseerd, leesbaar en efficiënt.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                     <div>
+                        <h3 class="text-xl font-semibold mb-4">De Functie als 'Zwarte Doos'</h3>
+                        <p class="mb-4">Je hoeft niet te weten *hoe* een functie precies werkt, alleen *wat* hij doet. Dit principe heet abstractie en is fundamenteel in programmeren.</p>
+                        <div class="flex items-center justify-around p-6 bg-gray-50 rounded-lg text-center font-semibold text-lg">
+                            <div>Input<br>Argument(en)</div>
+                            <div class="text-3xl text-gray-400">→</div>
+                            <div class="p-6 bg-white border-2 border-dashed border-gray-400 rounded-lg">
+                                def functie():<br>
+                                <span class="text-gray-500">... logica ...</span>
+                            </div>
+                             <div class="text-3xl text-gray-400">→</div>
+                            <div>Output<br>Returnwaarde</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Een Functie in Actie</h3>
+                        <p class="mb-4">Hier is een functie die de oppervlakte van een cirkel berekent. Verander de straal en zie het resultaat veranderen.</p>
+                        <div class="bg-gray-800 rounded-lg p-4 font-code">
+                            <div class="text-purple-400">def <span class="text-white">bereken_oppervlakte</span>(<span class="text-cyan-300">straal</span>):</div>
+                            <div class="text-gray-400 ml-4">pi = 3.14159</div>
+                            <div class="text-purple-400 ml-4">return <span class="text-white">pi * straal ** 2</span></div>
+                            <div class="mt-4 text-white">
+                                oppervlakte = bereken_oppervlakte(straal=<span id="radiusValue">5</span>)
+                            </div>
+                            <input type="range" min="1" max="20" value="5" id="radiusSlider" class="w-full mt-2 accent-[#e58c5d]">
+                            <div id="functionOutput" class="interactive-code-output visible mt-2 p-3 bg-gray-900 rounded font-bold text-cyan-300">Oppervlakte: 78.53975</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="pseudo" class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold mb-2">Denken als een Programmeur: Pseudocode</h2>
+                <p class="text-gray-600 mb-8">Voordat je code schrijft, is het slim om je plan uit te werken in pseudocode. Dit is een simpele, leesbare beschrijving van je logica in het Nederlands. Het helpt je om je gedachten te structureren en fouten te voorkomen.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                     <div>
+                        <h3 class="text-xl font-semibold mb-4">Van Idee naar Code</h3>
+                        <p class="mb-4">Pseudocode is de cruciale tussenstap die een abstract idee vertaalt naar een concreet, uitvoerbaar plan voor je programma.</p>
+                         <div class="space-y-4">
+                            <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-[#e58c5d]">
+                                <h4 class="font-bold">1. Idee</h4>
+                                <p class="text-gray-700">Ik wil korting geven bij grote bestellingen.</p>
+                            </div>
+                            <div class="text-2xl text-center text-gray-400">↓</div>
+                            <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-blue-500">
+                                <h4 class="font-bold">2. Pseudocode</h4>
+                                <p class="text-gray-700 font-code">ALS bedrag > 50 DAN pas korting toe.</p>
+                            </div>
+                            <div class="text-2xl text-center text-gray-400">↓</div>
+                            <div class="p-4 bg-gray-50 rounded-lg border-l-4 border-green-500">
+                                <h4 class="font-bold">3. Python Code</h4>
+                                <p class="text-gray-700 font-code">if order_total > 50:<br>&nbsp;&nbsp;&nbsp;&nbsp;apply_discount()</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-4">Pseudocode vs. Python</h3>
+                        <p class="mb-4">Hier zie je hoe de algemene concepten uit pseudocode zich direct vertalen naar specifieke Python-code.</p>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-gray-100">
+                                    <tr>
+                                        <th class="p-3 font-semibold">Concept</th>
+                                        <th class="p-3 font-semibold">Pseudocode</th>
+                                        <th class="p-3 font-semibold font-code">Python</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="p-3 font-semibold">Conditie</td>
+                                        <td class="p-3">IF...THEN...ELSE</td>
+                                        <td class="p-3 font-code text-purple-600">if...else:</td>
+                                    </tr>
+                                     <tr>
+                                        <td class="p-3 font-semibold">Loop</td>
+                                        <td class="p-3">WHILE...DO</td>
+                                        <td class="p-3 font-code text-purple-600">while...:</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold">Input</td>
+                                        <td class="p-3">LEES naam IN</td>
+                                        <td class="p-3 font-code text-purple-600">naam = input()</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold">Output</td>
+                                        <td class="p-3">TOON "Hallo"</td>
+                                        <td class="p-3 font-code text-purple-600">print("Hallo")</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+             <section id="oefenen" class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold mb-2">Aan de Slag: Oefeningen</h2>
+                <p class="text-gray-600 mb-8">De beste manier om te leren programmeren is door het te doen! Begin met deze kleine projecten om je vaardigheden te testen en te versterken. Probeer ze eerst zelf op te lossen.</p>
+                <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 list-none p-0">
+                    <li class="bg-gray-50 p-4 rounded-lg flex items-center"><span class="text-[#e58c5d] mr-3 text-xl">✓</span> Een raadspel</li>
+                    <li class="bg-gray-50 p-4 rounded-lg flex items-center"><span class="text-[#e58c5d] mr-3 text-xl">✓</span> BMI berekenen</li>
+                    <li class="bg-gray-50 p-4 rounded-lg flex items-center"><span class="text-[#e58c5d] mr-3 text-xl">✓</span> Rij van Fibonacci</li>
+                    <li class="bg-gray-50 p-4 rounded-lg flex items-center"><span class="text-[#e58c5d] mr-3 text-xl">✓</span> Dobbelsteen simulatie</li>
+                    <li class="bg-gray-50 p-4 rounded-lg flex items-center"><span class="text-[#e58c5d] mr-3 text-xl">✓</span> Blad-steen-schaar</li>
+                    <li class="bg-gray-50 p-4 rounded-lg flex items-center"><span class="text-[#e58c5d] mr-3 text-xl">✓</span> Boter-kaas-en-eieren</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <footer class="text-center py-12 px-4">
+        <p class="text-gray-600">Dit is het einde van de crash course. De belangrijkste stap is nu aan jou: blijf oefenen, bouw projecten en wees niet bang om fouten te maken!</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chartColors = {
+                color1: '#e58c5d',
+                color2: '#a7a5a3',
+                color3: '#6b7280',
+                color4: '#3b82f6',
+                bg: '#f7f3f0'
+            };
+            
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                  return label.join(' ');
+                }
+                return label;
+            };
+
+            const dataTypesCtx = document.getElementById('dataTypesChart')?.getContext('2d');
+            if (dataTypesCtx) {
+                new Chart(dataTypesCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['String (str)', 'Integer (int)', 'Float (float)', 'Boolean (bool)'],
+                        datasets: [{
+                            label: 'Gebruik van Datatypes',
+                            data: [45, 35, 10, 10],
+                            backgroundColor: [chartColors.color1, chartColors.color2, chartColors.color3, chartColors.color4],
+                            borderColor: chartColors.bg,
+                            borderWidth: 5,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            tooltip: { callbacks: { title: tooltipTitleCallback } }
+                        }
+                    }
+                });
+            }
+
+            const loopsCtx = document.getElementById('loopsChart')?.getContext('2d');
+            if (loopsCtx) {
+                 new Chart(loopsCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Bekend aantal herhalingen', 'Herhalen o.b.v. conditie'],
+                        datasets: [{
+                            label: 'For Loop',
+                            data: [85, 15],
+                            backgroundColor: chartColors.color1,
+                            borderRadius: 4,
+                        }, {
+                            label: 'While Loop',
+                            data: [15, 85],
+                            backgroundColor: chartColors.color2,
+                            borderRadius: 4,
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { x: { stacked: true }, y: { stacked: true } },
+                        plugins: {
+                            title: { display: true, text: 'Typische Toepassingen van Loops' },
+                            tooltip: { callbacks: { title: tooltipTitleCallback } }
+                        }
+                    }
+                });
+            }
+
+            const runInputBtn = document.getElementById('runInputBtn');
+            const nameInput = document.getElementById('nameInput');
+            const inputOutput = document.getElementById('inputOutput');
+            runInputBtn.addEventListener('click', () => {
+                const name = nameInput.value || 'onbekend';
+                inputOutput.textContent = `> Hallo, ${name}!`;
+                inputOutput.classList.add('visible');
+            });
+            
+            const radiusSlider = document.getElementById('radiusSlider');
+            const radiusValue = document.getElementById('radiusValue');
+            const functionOutput = document.getElementById('functionOutput');
+            radiusSlider.addEventListener('input', (e) => {
+                const radius = parseFloat(e.target.value);
+                const area = 3.14159 * (radius ** 2);
+                radiusValue.textContent = radius;
+                functionOutput.textContent = `Oppervlakte: ${area.toFixed(4)}`;
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if(link.getAttribute('href').includes(current)){
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
